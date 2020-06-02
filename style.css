@@ -1,0 +1,50 @@
+.header {
+    display: inline-block;
+    width: 100%;
+    border: 1px solid red;
+}
+
+.timer {
+    float: right;
+}
+
+.highscore {
+    float: left;
+}
+
+.container {
+    margin: auto;
+
+    border: 3px solid orange;
+   
+}
+
+.answers {
+    padding: 1px;
+
+}
+
+#answer1 {
+
+    background-color: purple;
+
+}
+
+#answer2 {
+
+    background-color: purple;
+
+}
+
+#answer3 {
+
+    background-color: purple;
+
+}
+
+#answer4 {
+
+    background-color: purple;
+
+}
+
