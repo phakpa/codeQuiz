@@ -1,50 +1,29 @@
-.header {
+body {
+    background-color: lightblue;
+}
+
+header {
     display: inline-block;
     width: 100%;
-    border: 1px solid red;
 }
 
 .timer {
-    float: right;
+    float:right;
 }
 
 .highscore {
     float: left;
 }
 
-.container {
-    margin: auto;
-
-    border: 3px solid orange;
-   
-}
-
 .answers {
-    padding: 1px;
-
+    margin: 1px;
+    background-color: yellow;
 }
 
-#answer1 {
-
-    background-color: purple;
-
+a {
+    color: darkred;
 }
 
-#answer2 {
-
-    background-color: purple;
-
+.center {
+    text-align: center;
 }
-
-#answer3 {
-
-    background-color: purple;
-
-}
-
-#answer4 {
-
-    background-color: purple;
-
-}
-
