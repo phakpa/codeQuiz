@@ -1,29 +1,33 @@
 body {
-    background-color: lightblue;
+  background-color: lightblue;
 }
 
 header {
-    display: inline-block;
-    width: 100%;
+  display: inline-block;
+  width: 100%;
 }
 
 .timer {
-    float:right;
+  float: right;
 }
 
 .highscore {
-    float: left;
+  float: left;
 }
 
 .answers {
-    margin: 1px;
-    background-color: yellow;
+  margin: 1px;
+  background-color: yellow;
 }
 
 a {
-    color: darkred;
+  color: darkred;
 }
 
 .center {
-    text-align: center;
+  text-align: center;
+}
+
+.hide {
+  display: none;
 }

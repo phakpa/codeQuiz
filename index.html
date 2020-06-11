@@ -1,39 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Coding Quiz</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <header>
-        <div class="highscore"></div>
-        <div class="timer"></div>
+      <div class="highscore"></div>
+      <div class="timer"></div>
     </header>
 
-    <div class="container">
-
-        <h1 class="questions"></h1>
-        <div class="answer1"></div>
-        <div class="answer2"></div>
-        <div class="answer3"></div>
-        <div class="answer4"></div>
+    <div class="container main">
+        <div class="questions"></div>
+        <div class="highScoreForm"></div>
+        <div class="submission"></div>
+        <div><button class="startButton"></button></div>
+        <div><button class="answerA"></button></div>
+        <div><button class="answerB"></button></div>
+        <div><button class="answerC"></button></div>
+        <div><button class="answerD"></button></div>
         <div class="rightWrong"></div>
-
-
-    </div>
-
-
-
-
-
+        <div class ="formMain">
+            Enter Initials: 
+            <input class="userID"  >
+            <button class="userSubmit"> Submit</button>
+        </div>
 
     <script src="script.js"></script>
-</body>
-
+  </body>
 </html>
