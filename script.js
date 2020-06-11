@@ -8,10 +8,17 @@ const answerCEL = document.querySelector(".answerC");
 const answerDEL = document.querySelector(".answerD");
 const rightWrongEL = document.querySelector(".rightWrong");
 const submissionEL = document.querySelector(".submission");
-const highScoreFormEL = document.querySelector(".highScoreForm");
 const formMainEL = document.querySelector(".formMain");
-const userIdEL = document.querySelector(".userID");
+const mainEL = document.querySelector(".main");
+const finalScoreEL = document.querySelector(".finalScore");
+
+const userIdEL = document.querySelector("#userID");
+const highScoreFormEL = document.querySelector(".highScoreForm");
+const highScoreFormMainEL = document.querySelector(".highScoreFormMain");
+const highScoreList = document.querySelector("#highScore-list");
 const userSubmitEL = document.querySelector(".userSubmit");
+const goBackBtnEL = document.querySelector(".goBackBtn");
+const clearScoreBtnEL = document.querySelector(".clearScoreBtn");
 
 let questionsArr = [
   {
@@ -106,16 +113,85 @@ let secondsLeft = 0;
 let correctIncorrect = -1;
 let count = 0;
 let stopTimer = 0;
+let highScoresArr = [];
 
 mainPage();
 
+init();
+
+function renderHS() {
+  highScoreList.innerHTML = "";
+
+  for (let i = 0; i < highScoresArr.length; i++) {
+    let highScore = highScoresArr[i];
+
+    let li = document.createElement("li");
+    li.textContent = highScore;
+    li.setAttribute("data-index", i);
+
+    highScoreList.appendChild(li);
+  }
+}
+
+function init() {
+  let storedHS = JSON.parse(localStorage.getItem("highScores"));
+  if (storedHS !== null) {
+    highScoresArr = storedHS;
+  }
+  renderHS();
+}
+
+function storeHS() {
+  localStorage.setItem("highScores", JSON.stringify(highScoresArr));
+}
+
+userSubmitEL.addEventListener("click", function (event) {
+  event.preventDefault();
+
+  let HSText = userIdEL.value.trim();
+
+  if (HSText === "") {
+    return;
+  }
+
+  highScoresArr.push(HSText);
+  userIdEL.value = "";
+
+  storeHS();
+  renderHS();
+});
+
+clearScoreBtnEL.addEventListener("click", function (event) {
+  let element = event.target;
+
+  if (element.matches("button") === true) {
+    let index = element.parentElement.getAttribute("data-index");
+    highScoresArr.splice(index, 100);
+
+    storeHS();
+    renderHS();
+  }
+});
+
 function mainPage() {
+  count = 0;
+  stopTimer = 0;
+  secondsLeft = 0;
+  questionsIndex = 0;
+  correctIncorrect = -1;
+  submissionEL.classList.add("hide");
+  questionsEL.classList.remove("hide");
+  startButtonEL.classList.remove("hide");
+  timerEL.classList.remove("hide");
+  highscoreEL.classList.remove("hide");
+  highScoreFormMainEL.classList.add("hide");
   formMainEL.classList.add("hide");
   highscoreEL.innerHTML = '<a href="#">View Highscores</a>';
   timerEL.textContent = "Timer: " + secondsLeft;
   questionsEL.innerHTML =
     "<h1>Coding Quiz Challenge</h1> <p>There are a total of 10 questions, you get 5 seconds subtracted from your final time for every wrong answer. Good luck and have fun!</p>";
   startButtonEL.innerHTML = "Start";
+  mainEL.classList.add("center");
   answerAEL.classList.add("hide");
   answerBEL.classList.add("hide");
   answerCEL.classList.add("hide");
@@ -123,6 +199,9 @@ function mainPage() {
 }
 
 function startGame() {
+  secondsLeft = 75;
+  setTime();
+  mainEL.classList.remove("center");
   nextQuestion();
   startButtonEL.classList.add("hide");
   answerAEL.classList.remove("hide");
@@ -132,11 +211,10 @@ function startGame() {
 }
 
 function nextQuestion() {
-  console.log("correct number " + correctIncorrect);
-  console.log("count for questions " + count);
-  console.log("question index " + questionsIndex);
-  console.log(questionsArr.length);
-
+  correctAnswer();
+  if (count > 0) {
+    rightWrongEL.classList.remove("hide");
+  }
   questionsEL.textContent = questionsArr[questionsIndex].question;
   answerAEL.textContent = questionsArr[questionsIndex].answerA;
   answerBEL.textContent = questionsArr[questionsIndex].answerB;
@@ -146,6 +224,8 @@ function nextQuestion() {
 }
 
 function submission() {
+  correctAnswer();
+  submissionEL.classList.remove("hide");
   formMainEL.classList.remove("hide");
   answerAEL.classList.add("hide");
   answerBEL.classList.add("hide");
@@ -153,23 +233,38 @@ function submission() {
   answerDEL.classList.add("hide");
   questionsEL.classList.add("hide");
 
-  const newDiv = document.createElement("div");
-  newDiv.textContent = "All Done!!";
-  const newDiv1 = document.createElement("div");
-  newDiv1.textContent = "Your Final Score is : " + (secondsLeft - 1);
-  submissionEL.appendChild(newDiv);
-  submissionEL.appendChild(newDiv1);
-
-  console.log(secondsLeft - 1);
+  finalScoreEL.innerHTML = "Your Final Score is: " + (secondsLeft - 1);
 }
 
-function correctAnswer() {}
+function correctAnswer() {
+  if (correctIncorrect === 0) {
+    if (secondsLeft > 6) {
+      secondsLeft = secondsLeft - 5;
+    } else {
+      secondsLeft = 0;
+    }
+    rightWrongEL.textContent = "Wrong!";
+  } else if (correctIncorrect === 1) {
+    rightWrongEL.textContent = "Correct!";
+  } else {
+  }
+}
 
 function highScores() {
-  alert("high scores!!");
+  mainEL.classList.remove("center");
+  highScoreFormMainEL.classList.remove("hide");
+  questionsEL.classList.add("hide");
+  startButtonEL.classList.add("hide");
+  timerEL.classList.add("hide");
+  highscoreEL.classList.add("hide");
+  submissionEL.classList.add("hide");
+  formMainEL.classList.add("hide");
+  rightWrongEL.classList.add("hide");
+  answerAEL.classList.add("hide");
+  answerBEL.classList.add("hide");
+  answerCEL.classList.add("hide");
+  answerDEL.classList.add("hide");
 }
-
-function displayCorrectInccorect() {}
 
 function setTime() {
   let timerInterval = setInterval(function () {
@@ -183,12 +278,15 @@ function setTime() {
 }
 
 startButtonEL.addEventListener("click", function () {
-  secondsLeft = 75;
-  setTime();
   startGame();
 });
 
-highscoreEL.addEventListener("click", highScores);
+highscoreEL.addEventListener("click", function () {
+  highScores();
+});
+userSubmitEL.addEventListener("click", function () {
+  highScores();
+});
 answerAEL.addEventListener("click", function () {
   if (count === 0 || count === 3 || count === 4 || count === 9) {
     correctIncorrect = 1;
@@ -244,4 +342,8 @@ answerDEL.addEventListener("click", function () {
     stopTimer = 1;
     submission();
   }
+});
+
+goBackBtnEL.addEventListener("click", function () {
+  mainPage();
 });

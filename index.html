@@ -21,19 +21,28 @@
 
     <div class="container main">
         <div class="questions"></div>
-        <div class="highScoreForm"></div>
-        <div class="submission"></div>
+        <div class="highScoreFormMain">
+            <div class="highScoreForm"></div>
+            <h1><strong>HighScores</strong><h1></h1>
+            <ul id="highScore-list"></ul>
+            <button class="goBackBtn">Go Back</button>
+            <button class="clearScoreBtn">Clear High Scores</button>
+        </div>
+        <div class="submission">
+            <p>All Done!!</p>
+            <div class ="finalScore"></div>
+        </div>
         <div><button class="startButton"></button></div>
         <div><button class="answerA"></button></div>
         <div><button class="answerB"></button></div>
         <div><button class="answerC"></button></div>
         <div><button class="answerD"></button></div>
-        <div class="rightWrong"></div>
         <div class ="formMain">
             Enter Initials: 
-            <input class="userID"  >
+            <input type ="text" name="userID" id="userID">
             <button class="userSubmit"> Submit</button>
         </div>
+        <div class="rightWrong center" id="fadout"></div>
 
     <script src="script.js"></script>
   </body>
