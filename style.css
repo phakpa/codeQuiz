@@ -31,3 +31,11 @@ a {
 .hide {
   display: none;
 }
+
+.fadeOut {
+  opacity: 0;
+}
+
+.fadeIn {
+  opacity: 1;
+}

@@ -113,12 +113,14 @@ let secondsLeft = 0;
 let correctIncorrect = -1;
 let count = 0;
 let stopTimer = 0;
+let fadeTimer = 0;
 let highScoresArr = [];
 
 mainPage();
 
 init();
 
+//local storage adding/deleting for user highscore
 function renderHS() {
   highScoreList.innerHTML = "";
 
@@ -154,7 +156,7 @@ userSubmitEL.addEventListener("click", function (event) {
     return;
   }
 
-  highScoresArr.push(HSText);
+  highScoresArr.push(HSText + " - " + secondsLeft);
   userIdEL.value = "";
 
   storeHS();
@@ -176,7 +178,7 @@ clearScoreBtnEL.addEventListener("click", function (event) {
 function mainPage() {
   count = 0;
   stopTimer = 0;
-  secondsLeft = 0;
+  secondsLeft = -1;
   questionsIndex = 0;
   correctIncorrect = -1;
   submissionEL.classList.add("hide");
@@ -187,7 +189,7 @@ function mainPage() {
   highScoreFormMainEL.classList.add("hide");
   formMainEL.classList.add("hide");
   highscoreEL.innerHTML = '<a href="#">View Highscores</a>';
-  timerEL.textContent = "Timer: " + secondsLeft;
+  timerEL.textContent = "Timer: " + "0";
   questionsEL.innerHTML =
     "<h1>Coding Quiz Challenge</h1> <p>There are a total of 10 questions, you get 5 seconds subtracted from your final time for every wrong answer. Good luck and have fun!</p>";
   startButtonEL.innerHTML = "Start";
@@ -211,6 +213,8 @@ function startGame() {
 }
 
 function nextQuestion() {
+  fadeTimer = 2;
+  fadeOutTime();
   correctAnswer();
   if (count > 0) {
     rightWrongEL.classList.remove("hide");
@@ -224,6 +228,8 @@ function nextQuestion() {
 }
 
 function submission() {
+  fadeTimer = 2;
+  fadeOutTime();
   if (questionsIndex != questionsArr.length) {
     correctAnswer();
   }
@@ -269,8 +275,11 @@ function highScores() {
 
 function setTime() {
   let timerInterval = setInterval(function () {
-    timerEL.textContent = "Timer: " + secondsLeft;
-
+    if (secondsLeft < 0) {
+      timerEL.textContent = "Timer: " + "0";
+    } else {
+      timerEL.textContent = "Timer: " + secondsLeft;
+    }
     if (secondsLeft === 0 || stopTimer === 1) {
       clearInterval(timerInterval);
       submission();
@@ -350,3 +359,17 @@ answerDEL.addEventListener("click", function () {
 goBackBtnEL.addEventListener("click", function () {
   mainPage();
 });
+
+function fadeOutTime() {
+  let timerInterval = setInterval(function () {
+    if (fadeTimer === 0) {
+      rightWrongEL.classList.remove("fadeIn");
+      rightWrongEL.classList.add("fadeOut");
+      clearInterval(timerInterval);
+    } else {
+      rightWrongEL.classList.add("fadeIn");
+      rightWrongEL.classList.remove("fadeOut");
+      fadeTimer--;
+    }
+  }, 1000);
+}
