@@ -110,7 +110,6 @@ let questionsArr = [
 
 let questionsIndex = 0;
 let secondsLeft = 0;
-let finalScore = 0;
 let correctIncorrect = -1;
 let count = 0;
 let stopTimer = 0;
@@ -225,7 +224,9 @@ function nextQuestion() {
 }
 
 function submission() {
-  correctAnswer();
+  if (questionsIndex != questionsArr.length) {
+    correctAnswer();
+  }
   submissionEL.classList.remove("hide");
   formMainEL.classList.remove("hide");
   answerAEL.classList.add("hide");
@@ -234,31 +235,19 @@ function submission() {
   answerDEL.classList.add("hide");
   questionsEL.classList.add("hide");
 
-  if (secondsLeft > 0) {
-    finalScore = secondsLeft - 1;
-  } else {
-    finalScore = 0;
-  }
-
-  finalScoreEL.innerHTML = "Your Final Score is: " + finalScore;
+  finalScoreEL.innerHTML = "Your Final Score is: " + secondsLeft;
 }
 
 function correctAnswer() {
   if (correctIncorrect === 0) {
-    if (secondsLeft > 6) {
-      secondsLeft = secondsLeft - 5;
-      if (secondsLeft <= 0) {
-        secondsLeft = 1;
-      } else {
-        secondsLeft = secondsLeft - 1;
-      }
-    } else {
-      secondsLeft = 1;
-    }
     rightWrongEL.textContent = "Wrong!";
+    if (secondsLeft >= 5) {
+      secondsLeft = secondsLeft - 5;
+    } else if (secondsLeft < 5) {
+      secondsLeft = 0;
+    }
   } else if (correctIncorrect === 1) {
     rightWrongEL.textContent = "Correct!";
-  } else {
   }
 }
 
@@ -280,12 +269,13 @@ function highScores() {
 
 function setTime() {
   let timerInterval = setInterval(function () {
-    secondsLeft--;
     timerEL.textContent = "Timer: " + secondsLeft;
 
     if (secondsLeft === 0 || stopTimer === 1) {
-      submission();
       clearInterval(timerInterval);
+      submission();
+    } else {
+      secondsLeft--;
     }
   }, 1000);
 }
