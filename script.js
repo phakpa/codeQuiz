@@ -110,6 +110,7 @@ let questionsArr = [
 
 let questionsIndex = 0;
 let secondsLeft = 0;
+let finalScore = 0;
 let correctIncorrect = -1;
 let count = 0;
 let stopTimer = 0;
@@ -233,15 +234,26 @@ function submission() {
   answerDEL.classList.add("hide");
   questionsEL.classList.add("hide");
 
-  finalScoreEL.innerHTML = "Your Final Score is: " + (secondsLeft - 1);
+  if (secondsLeft > 0) {
+    finalScore = secondsLeft - 1;
+  } else {
+    finalScore = 0;
+  }
+
+  finalScoreEL.innerHTML = "Your Final Score is: " + finalScore;
 }
 
 function correctAnswer() {
   if (correctIncorrect === 0) {
     if (secondsLeft > 6) {
       secondsLeft = secondsLeft - 5;
+      if (secondsLeft <= 0) {
+        secondsLeft = 1;
+      } else {
+        secondsLeft = secondsLeft - 1;
+      }
     } else {
-      secondsLeft = 0;
+      secondsLeft = 1;
     }
     rightWrongEL.textContent = "Wrong!";
   } else if (correctIncorrect === 1) {
@@ -272,6 +284,7 @@ function setTime() {
     timerEL.textContent = "Timer: " + secondsLeft;
 
     if (secondsLeft === 0 || stopTimer === 1) {
+      submission();
       clearInterval(timerInterval);
     }
   }, 1000);
