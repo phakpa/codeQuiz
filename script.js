@@ -11,7 +11,6 @@ const submissionEL = document.querySelector(".submission");
 const formMainEL = document.querySelector(".formMain");
 const mainEL = document.querySelector(".main");
 const finalScoreEL = document.querySelector(".finalScore");
-
 const userIdEL = document.querySelector("#userID");
 const highScoreFormEL = document.querySelector(".highScoreForm");
 const highScoreFormMainEL = document.querySelector(".highScoreFormMain");
@@ -115,9 +114,10 @@ let count = 0;
 let stopTimer = 0;
 let fadeTimer = 0;
 let highScoresArr = [];
+let reset = 0;
+let fadeReset = 0;
 
 mainPage();
-
 init();
 
 //local storage adding/deleting for user highscore
@@ -176,6 +176,8 @@ clearScoreBtnEL.addEventListener("click", function (event) {
 });
 
 function mainPage() {
+  fadeReset = 0;
+  reset = 0;
   count = 0;
   stopTimer = 0;
   secondsLeft = -1;
@@ -213,9 +215,9 @@ function startGame() {
 }
 
 function nextQuestion() {
-  fadeTimer = 2;
-  fadeOutTime();
-  correctAnswer();
+  fadeReset = 1;
+  fadeTimer = 1;
+
   if (count > 0) {
     rightWrongEL.classList.remove("hide");
   }
@@ -228,11 +230,9 @@ function nextQuestion() {
 }
 
 function submission() {
-  fadeTimer = 2;
-  fadeOutTime();
-  if (questionsIndex != questionsArr.length) {
-    correctAnswer();
-  }
+  fadeReset = 1;
+  fadeTimer = 1;
+
   submissionEL.classList.remove("hide");
   formMainEL.classList.remove("hide");
   answerAEL.classList.add("hide");
@@ -241,11 +241,14 @@ function submission() {
   answerDEL.classList.add("hide");
   questionsEL.classList.add("hide");
 
+  timerEL.textContent = "Timer: " + secondsLeft;
   finalScoreEL.innerHTML = "Your Final Score is: " + secondsLeft;
 }
 
 function correctAnswer() {
   if (correctIncorrect === 0) {
+    rightWrongEL.classList.remove("correct");
+    rightWrongEL.classList.add("incorrect");
     rightWrongEL.textContent = "Wrong!";
     if (secondsLeft >= 5) {
       secondsLeft = secondsLeft - 5;
@@ -253,11 +256,14 @@ function correctAnswer() {
       secondsLeft = 0;
     }
   } else if (correctIncorrect === 1) {
+    rightWrongEL.classList.remove("incorrect");
+    rightWrongEL.classList.add("correct");
     rightWrongEL.textContent = "Correct!";
   }
 }
 
 function highScores() {
+  reset = 1;
   mainEL.classList.remove("center");
   highScoreFormMainEL.classList.remove("hide");
   questionsEL.classList.add("hide");
@@ -280,13 +286,32 @@ function setTime() {
     } else {
       timerEL.textContent = "Timer: " + secondsLeft;
     }
-    if (secondsLeft === 0 || stopTimer === 1) {
+    if (secondsLeft === 0 || stopTimer === 1 || reset === 1) {
       clearInterval(timerInterval);
-      submission();
+      if (secondsLeft === 0 || stopTimer === 1) {
+        submission();
+      }
     } else {
       secondsLeft--;
     }
   }, 1000);
+}
+
+function fadeOutTime() {
+  let timerInterval = setInterval(function () {
+    console.log(fadeTimer);
+    if (fadeTimer === 0) {
+      rightWrongEL.classList.remove("fadeIn");
+      rightWrongEL.classList.add("fadeOut");
+      if (fadeTimer === 0 || fadeReset === 1) {
+        clearInterval(timerInterval);
+      }
+    } else {
+      rightWrongEL.classList.add("fadeIn");
+      rightWrongEL.classList.remove("fadeOut");
+      fadeTimer--;
+    }
+  }, 250);
 }
 
 startButtonEL.addEventListener("click", function () {
@@ -296,9 +321,11 @@ startButtonEL.addEventListener("click", function () {
 highscoreEL.addEventListener("click", function () {
   highScores();
 });
+
 userSubmitEL.addEventListener("click", function () {
   highScores();
 });
+
 answerAEL.addEventListener("click", function () {
   if (count === 0 || count === 3 || count === 4 || count === 9) {
     correctIncorrect = 1;
@@ -307,12 +334,17 @@ answerAEL.addEventListener("click", function () {
   }
   count++;
   if (count < questionsArr.length) {
+    fadeOutTime();
+    correctAnswer();
     nextQuestion();
   } else {
     stopTimer = 1;
+    fadeOutTime();
+    correctAnswer();
     submission();
   }
 });
+
 answerBEL.addEventListener("click", function () {
   if (count === 1) {
     correctIncorrect = 1;
@@ -321,12 +353,17 @@ answerBEL.addEventListener("click", function () {
   }
   count++;
   if (count < questionsArr.length) {
+    fadeOutTime();
+    correctAnswer();
     nextQuestion();
   } else {
     stopTimer = 1;
+    fadeOutTime();
+    correctAnswer();
     submission();
   }
 });
+
 answerCEL.addEventListener("click", function () {
   if (count === 2 || count === 5 || count === 6) {
     correctIncorrect = 1;
@@ -335,12 +372,17 @@ answerCEL.addEventListener("click", function () {
   }
   count++;
   if (count < questionsArr.length) {
+    fadeOutTime();
+    correctAnswer();
     nextQuestion();
   } else {
     stopTimer = 1;
+    fadeOutTime();
+    correctAnswer();
     submission();
   }
 });
+
 answerDEL.addEventListener("click", function () {
   if (count === 7 || count === 8) {
     correctIncorrect = 1;
@@ -349,9 +391,13 @@ answerDEL.addEventListener("click", function () {
   }
   count++;
   if (count < questionsArr.length) {
+    fadeOutTime();
+    correctAnswer();
     nextQuestion();
   } else {
     stopTimer = 1;
+    fadeOutTime();
+    correctAnswer();
     submission();
   }
 });
@@ -359,17 +405,3 @@ answerDEL.addEventListener("click", function () {
 goBackBtnEL.addEventListener("click", function () {
   mainPage();
 });
-
-function fadeOutTime() {
-  let timerInterval = setInterval(function () {
-    if (fadeTimer === 0) {
-      rightWrongEL.classList.remove("fadeIn");
-      rightWrongEL.classList.add("fadeOut");
-      clearInterval(timerInterval);
-    } else {
-      rightWrongEL.classList.add("fadeIn");
-      rightWrongEL.classList.remove("fadeOut");
-      fadeTimer--;
-    }
-  }, 1000);
-}

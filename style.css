@@ -15,9 +15,30 @@ header {
   float: left;
 }
 
+.startButton {
+  font-size: 40px;
+  margin: 1px;
+  background-color: lightgreen;
+}
+
 .answers {
   margin: 1px;
   background-color: yellow;
+}
+
+.correct {
+  font-size: 50px;
+  color: green;
+}
+
+.incorrect {
+  font-size: 50px;
+  color: red;
+}
+
+#highScore-list {
+  font-size: 20px;
+  font: bold;
 }
 
 a {
@@ -38,4 +59,8 @@ a {
 
 .fadeIn {
   opacity: 1;
+}
+
+.questions {
+  font-size: 25px;
 }
